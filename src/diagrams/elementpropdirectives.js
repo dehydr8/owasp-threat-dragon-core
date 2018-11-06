@@ -64,11 +64,14 @@ function elementThreats($routeParams, $location, common, dialogs) {
             scope:
             {
                 threats: '=',
+                graph: '=',
                 save: '&'
             }
         };
 
     var newThreat = initialiseThreat();
+    var copyableThreats = [];
+    var selectedThreats = initialiseSelectedThreats();
     var editIndex = null;
     var originalThreat = {};
     var getLogFn = common.logger.getLogFn;
@@ -81,6 +84,24 @@ function elementThreats($routeParams, $location, common, dialogs) {
 
         scope.onNewThreat = function () {
             dialogs.confirm('diagrams/ThreatEditPane.html', scope.addThreat, function () { return { heading: 'New Threat', threat: newThreat, editing: true }; }, reset);
+        };
+
+        scope.onCopyThreat = function () {
+            copyableThreats = initialiseCopyableThreats(scope.graph);
+            dialogs.confirm('diagrams/ThreatListPane.html', scope.addCopiedThreats, function () { return { heading: 'Copy Threats', threats: copyableThreats, selected: selectedThreats }; }, resetCopy);
+        };
+
+        scope.addCopiedThreats = function () {
+            if (!scope.threats) {
+                scope.threats = [];
+            }
+
+            selectedThreats.threats.forEach(function(item) {
+                scope.threats.push(item.threat);
+                scope.save({ threat: item.threat });
+            });
+
+            resetCopy();
         };
 
         scope.onEditThreat = function (index) {
@@ -143,10 +164,33 @@ function elementThreats($routeParams, $location, common, dialogs) {
         $location.search('threat', null);
     }
 
+    function resetCopy() {
+        selectedThreats = initialiseSelectedThreats();
+    }
+
+    function initialiseCopyableThreats(graph) {
+        var list = [];
+        graph.getCells().forEach(function(cell) {
+            if (typeof cell.threats !== 'undefined') {
+                cell.threats.forEach(function(threat) {
+                    list.push({
+                        type: cell.attributes.type,
+                        name: cell.name,
+                        threat: threat
+                    });
+                });
+            }
+        });
+        return list;
+    }
+
     function initialiseThreat() {
         return { status: 'Open', severity: 'Medium' };
     }
 
+    function initialiseSelectedThreats() {
+        return { threats: [] };
+    }
 }
 
 module.exports = {

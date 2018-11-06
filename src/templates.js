@@ -1,7 +1,7 @@
 angular.module('templates', [])
   .run(['$templateCache', function($templateCache) {
     $templateCache.put('diagrams/confirmReloadOnDirty.html',
-    '<div>\n' +
+    '﻿<div>\n' +
     '    <div class="modal-header">\n' +
     '        <h3>Are you sure?</h3>\n' +
     '    </div>\n' +
@@ -16,7 +16,7 @@ angular.module('templates', [])
     '</div>\n' +
     '')
   $templateCache.put('diagrams/diagrameditor.html',
-    '<div data-ng-controller="diagram as vm" class="container-fluid diagram-container">\n' +
+    '﻿<div data-ng-controller="diagram as vm" class="container-fluid diagram-container">\n' +
     '    <div ng-show="!vm.errored">\n' +
     '        <div class="col-lg-2">\n' +
     '            <!--Diagram stencil-->\n' +
@@ -38,7 +38,7 @@ angular.module('templates', [])
     '                    </uib-accordion-heading>\n' +
     '                    <div ng-if="vm.selected">\n' +
     '                        <div ng-if="!vm.selected.outOfScope">\n' +
-    '                            <tmt-element-threats threats="vm.selected.threats" save="vm.edit()" />\n' +
+    '                            <tmt-element-threats threats="vm.selected.threats" graph="vm.graph" save="vm.edit()" />\n' +
     '                        </div>\n' +
     '                        <div ng-if="vm.selected.outOfScope">\n' +
     '                            <em>The selected element is out of scope</em>\n' +
@@ -126,7 +126,7 @@ angular.module('templates', [])
     '</div>\n' +
     '')
   $templateCache.put('diagrams/ElementPropertiesPane.html',
-    '<form name="elementPropertiesEditForm">\n' +
+    '﻿<form name="elementPropertiesEditForm">\n' +
     '    <div>\n' +
     '        <div class="form-group">\n' +
     '            <label>Name</label>\n' +
@@ -196,15 +196,15 @@ angular.module('templates', [])
     '</form>\n' +
     '')
   $templateCache.put('diagrams/modalAccept.html',
-    '<button class="btn btn-primary" ng-disabled="parameter.editing && (!threatEditForm.$dirty || !threatEditForm.$valid)" ng-click="onAction()">\n' +
+    '﻿<button class="btn btn-primary" ng-disabled="parameter.editing && (!threatEditForm.$dirty || !threatEditForm.$valid)" ng-click="onAction()">\n' +
     '    Accept\n' +
     '</button>')
   $templateCache.put('diagrams/modalIgnore.html',
-    '<button class="btn btn-default" ng-click="onAction()">\n' +
+    '﻿<button class="btn btn-default" ng-click="onAction()">\n' +
     '    Ignore\n' +
     '</button>')
   $templateCache.put('diagrams/ThreatEditPane.html',
-    '<div>\n' +
+    '﻿<div>\n' +
     '    <div class="modal-header">\n' +
     '        <h3>{{parameter.heading}}<span class="pull-right" ng-if="parameter.threatTotal"> ({{parameter.threatIndex}} of {{parameter.threatTotal}})</span></h3>\n' +
     '    </div>\n' +
@@ -287,8 +287,37 @@ angular.module('templates', [])
     '    </div>\n' +
     '</div>\n' +
     '')
+  $templateCache.put('diagrams/ThreatListPane.html',
+    '﻿<div>\n' +
+    '    <div class="modal-header">\n' +
+    '        <h3>{{parameter.heading}}</h3>\n' +
+    '    </div>\n' +
+    '    <div class="modal-body">\n' +
+    '        <form name="threatCopyForm">\n' +
+    '            <div class="form-group">\n' +
+    '                <label>Threats</label>\n' +
+    '                <select size="10" name="typeInput" class="form-control" ng-required="true" ng-model="parameter.selected.threats" ng-options="item as (item.type + \'> \' + item.name +  \': \' + item.threat.type + \' => \' + item.threat.title) for item in parameter.threats" multiple>\n' +
+    '                </select>\n' +
+    '                <div ng-show="!threatCopyForm.typeInput.$valid && threatCopyForm.typeInput.$dirty">\n' +
+    '                    <p>\n' +
+    '                        <div class="alert alert-danger" role="alert">\n' +
+    '                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>\n' +
+    '                            <span class="sr-only">Error:</span>\n' +
+    '                            The threats type cannot be empty\n' +
+    '                        </div>\n' +
+    '                    </p>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
+    '        </form>\n' +
+    '    </div>\n' +
+    '    <div class="modal-footer">\n' +
+    '        <button class="btn btn-primary" ng-click="onOK()" ng-disabled="!threatCopyForm.$dirty || !threatCopyForm.$valid">Proceed</button>\n' +
+    '        <button class="btn btn-default" ng-click="onCancel()">Cancel</button>\n' +
+    '    </div>\n' +
+    '</div>\n' +
+    '')
   $templateCache.put('diagrams/ThreatSummaryPane.html',
-    '<ul id="threatSummaryPane" class="list-group">\n' +
+    '﻿<ul id="threatSummaryPane" class="list-group">\n' +
     '    <li class="list-group-item" ng-repeat="threat in threats">\n' +
     '        <a id="editThreat{{$index}}" href="" ng-click="onEditThreat($index)" data-toggle="tooltip" data-placement="top" title="Edit {{threat.title}}">\n' +
     '            <div class="text-overflow"><small>{{threat.title}}</small></div>\n' +
@@ -305,6 +334,9 @@ angular.module('templates', [])
     '</ul> \n' +
     '<button id="buttonNewThreat" class="btn btn-link" ng-click="onNewThreat()">\n' +
     '    <span class="glyphicon glyphicon-plus"></span> Add a new threat...\n' +
+    '</button>\n' +
+    '<button id="buttonCopyThreat" class="btn btn-link" ng-click="onCopyThreat()">\n' +
+    '    <span class="glyphicon glyphicon-plus"></span> Copy existing threats...\n' +
     '</button>')
   $templateCache.put('layout/pager.html',
     '<div class="clearfix" ng-if="canPrevious || canNext">\n' +
@@ -320,7 +352,7 @@ angular.module('templates', [])
     '</div>\n' +
     '')
   $templateCache.put('layout/structuredExit.html',
-    '<div id="structuredExitModal">\n' +
+    '﻿<div id="structuredExitModal">\n' +
     '    <div class="modal-header">\n' +
     '        <h3>Are you sure you want to leave this page?</h3>\n' +
     '    </div>\n' +
@@ -351,7 +383,7 @@ angular.module('templates', [])
     '</div>\n' +
     '')
   $templateCache.put('threatmodels/confirmReloadOnDirty.html',
-    '<div>\n' +
+    '﻿<div>\n' +
     '    <div class="modal-header">\n' +
     '        <h3>Are you sure?</h3>\n' +
     '    </div>\n' +
@@ -366,7 +398,7 @@ angular.module('templates', [])
     '</div>\n' +
     '')
   $templateCache.put('threatmodels/threatmodeldetail.html',
-    '<div data-ng-controller="threatmodel as vm" class="container-fluid">\n' +
+    '﻿<div data-ng-controller="threatmodel as vm" class="container-fluid">\n' +
     '    <div ng-if="!vm.threatModel.summary && !vm.errored">\n' +
     '        <p class="h3 text-center">Your threat model is loading...</p>\n' +
     '        <div class="spinner"></div>\n' +
@@ -448,7 +480,7 @@ angular.module('templates', [])
     '    </div>\n' +
     '</div>')
   $templateCache.put('threatmodels/threatmodeledit.html',
-    '<div data-ng-controller="threatmodel as vm" class="container-fluid">\n' +
+    '﻿<div data-ng-controller="threatmodel as vm" class="container-fluid">\n' +
     '    <div ng-if="!vm.threatModel.summary && !vm.errored && !vm.isNewModel">\n' +
     '        <p class="h3 text-center">Your threat model is loading...</p>\n' +
     '        <div class="spinner"></div>\n' +

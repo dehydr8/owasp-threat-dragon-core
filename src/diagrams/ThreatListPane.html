@@ -1,0 +1,27 @@
+﻿<div>
+    <div class="modal-header">
+        <h3>{{parameter.heading}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="threatCopyForm">
+            <div class="form-group">
+                <label>Threats</label>
+                <select size="10" name="typeInput" class="form-control" ng-required="true" ng-model="parameter.selected.threats" ng-options="item as (item.type + '> ' + item.name +  ': ' + item.threat.type + ' => ' + item.threat.title) for item in parameter.threats" multiple>
+                </select>
+                <div ng-show="!threatCopyForm.typeInput.$valid && threatCopyForm.typeInput.$dirty">
+                    <p>
+                        <div class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            The threats type cannot be empty
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="onOK()" ng-disabled="!threatCopyForm.$dirty || !threatCopyForm.$valid">Proceed</button>
+        <button class="btn btn-default" ng-click="onCancel()">Cancel</button>
+    </div>
+</div>
