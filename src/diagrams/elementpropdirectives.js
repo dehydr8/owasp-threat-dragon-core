@@ -43,6 +43,7 @@ function elementProperties(common) {
             scope:
             {
                 selected: '=',
+                vm: '=',
                 elementType: '@',
                 edit: '&'
             }

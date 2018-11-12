@@ -64,5 +64,36 @@
                 <input name="checkboxIsPublicNetwork" ng-disabled="selected.outOfScope" type="checkbox" ng-model="selected.isPublicNetwork" ng-change="edit()" /> Is over a public network
             </label>
         </div>
+        <div class="form-group">
+            <label>Data Elements</label>
+            <div ng-repeat="element in selected.dataElements" ng-form="diagramSubForm">
+                <div class="input-group">
+                    <input name="diagramTitle" class="form-control" type="text" ng-model="element" required placeholder="Element" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" data-toggle="tooltip" ng-click="vm.removeDataElement($index)" data-placement="top" title="Remove" aria-hidden="true" type="button">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    </span>
+                </div>
+            </div>
+            <div ng-repeat-end>
+                <div class="input-group" ng-show="vm.addingDataElement">
+                    <input class="form-control" type="text" ng-model="vm.newDataElement" placeholder="Data Element" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-disabled="vm.newDataElement.length == 0" data-toggle="tooltip" ng-click="vm.addDataElement()" data-placement="top" title="Add" aria-hidden="true" type="button">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                </div>
+                <button ng-show="vm.addingDataElement" class="btn btn-link" data-toggle="tooltip" ng-click="vm.cancelAddingDataElement()" data-placement="top" title="Cancel" aria-hidden="true" type="button">
+                    <span class="glyphicon glyphicon-remove"></span> Cancel
+                </button>
+                <div ng-hide="vm.addingDataElement">
+                    <button class="btn btn-link" ng-click="vm.startAddingDataElement()">
+                        <span class="glyphicon glyphicon-plus"></span> Add a new element ...
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </form>

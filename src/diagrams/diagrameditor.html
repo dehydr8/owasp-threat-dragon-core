@@ -78,11 +78,22 @@
         </div>
         <!--Element properties-->
         <div class="col-lg-2">
+            <div ng-if="!vm.selected" class="panel panel-default">
+                <div class="panel-heading panel-title">Diagram</div>
+                <div class="panel-body">
+                    <form name="diagramPropertiesEditForm">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="diagramDescription" rows="4" class="form-control" type="text" ng-model="vm.diagram.description" ng-change="vm.edit()" placeholder="Diagram description"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading panel-title">Properties</div>
                 <div class="panel-body">
                     <div ng-if="vm.selected && vm.selected.attributes.type != 'tm.Boundary' ">
-                        <tmt-element-properties edit=" vm.edit()" selected="vm.selected" element-type="{{vm.selected.attributes.type}}">
+                        <tmt-element-properties edit=" vm.edit()" vm="vm" selected="vm.selected" element-type="{{vm.selected.attributes.type}}">
                     </div>
                     <div ng-if="!vm.selected || vm.selected.attributes.type === 'tm.Boundary'">
                         <em>Select an element in the diagram to see or edit its properties</em>

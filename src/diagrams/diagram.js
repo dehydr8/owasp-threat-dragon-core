@@ -43,6 +43,13 @@ function diagram($scope, $location, $routeParams, $timeout, dialogs, common, dat
     vm.diagramId = $routeParams.diagramId;
     vm.currentZoomLevel = 0;
     vm.maxZoom = 4;
+    
+    vm.addingDataElement = false;
+    vm.newDataElement = initialiseNewDataElement();
+    vm.addDataElement = addDataElement;
+    vm.cancelAddingDataElement = cancelAddingDataElement;
+    vm.startAddingDataElement = startAddingDataElement;
+    vm.removeDataElement = removeDataElement;
 
     //structured exit
     $scope.$on('$locationChangeStart', function (event, current, previous) {
@@ -80,6 +87,7 @@ function diagram($scope, $location, $routeParams, $timeout, dialogs, common, dat
     }
 
     function save() {
+        console.log(vm.graph.getCells());
         var diagramData = { diagramJson: { cells: vm.graph.getCells() } };
 
         if (!_.isUndefined(vm.currentDiagram.options) && !_.isUndefined(vm.currentDiagram.options.height) && !_.isUndefined(vm.currentDiagram.options.width)) {
@@ -344,6 +352,34 @@ function diagram($scope, $location, $routeParams, $timeout, dialogs, common, dat
             threatWatchers[element.id]();
             threatWatchers.splice(element.id, 1);
         }
+    }
+
+    function initialiseNewDataElement() {
+        return "";
+    }
+
+    function addDataElement() {
+        if (_.isUndefined(vm.selected.dataElements)) {
+            vm.selected.dataElements = [];
+        }
+
+        vm.selected.dataElements.push(vm.newDataElement);
+        vm.newDataElement = initialiseNewDataElement();
+        vm.dirty = true;
+    }
+
+    function cancelAddingDataElement() {
+        vm.newDataElement = initialiseNewDataElement();
+        vm.addingDataElement = false;
+    }
+
+    function startAddingDataElement() {
+        vm.addingDataElement = true;
+    }
+
+    function removeDataElement(index) {
+        vm.selected.dataElements.splice(index, 1);
+        vm.dirty = true;
     }
 }
 

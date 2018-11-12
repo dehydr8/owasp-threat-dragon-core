@@ -96,11 +96,22 @@ angular.module('templates', [])
     '        </div>\n' +
     '        <!--Element properties-->\n' +
     '        <div class="col-lg-2">\n' +
+    '            <div ng-if="!vm.selected" class="panel panel-default">\n' +
+    '                <div class="panel-heading panel-title">Diagram</div>\n' +
+    '                <div class="panel-body">\n' +
+    '                    <form name="diagramPropertiesEditForm">\n' +
+    '                        <div class="form-group">\n' +
+    '                            <label>Description</label>\n' +
+    '                            <textarea name="diagramDescription" rows="4" class="form-control" type="text" ng-model="vm.diagram.description" ng-change="vm.edit()" placeholder="Diagram description"></textarea>\n' +
+    '                        </div>\n' +
+    '                    </form>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
     '            <div class="panel panel-default">\n' +
     '                <div class="panel-heading panel-title">Properties</div>\n' +
     '                <div class="panel-body">\n' +
     '                    <div ng-if="vm.selected && vm.selected.attributes.type != \'tm.Boundary\' ">\n' +
-    '                        <tmt-element-properties edit=" vm.edit()" selected="vm.selected" element-type="{{vm.selected.attributes.type}}">\n' +
+    '                        <tmt-element-properties edit=" vm.edit()" vm="vm" selected="vm.selected" element-type="{{vm.selected.attributes.type}}">\n' +
     '                    </div>\n' +
     '                    <div ng-if="!vm.selected || vm.selected.attributes.type === \'tm.Boundary\'">\n' +
     '                        <em>Select an element in the diagram to see or edit its properties</em>\n' +
@@ -191,6 +202,37 @@ angular.module('templates', [])
     '            <label>\n' +
     '                <input name="checkboxIsPublicNetwork" ng-disabled="selected.outOfScope" type="checkbox" ng-model="selected.isPublicNetwork" ng-change="edit()" /> Is over a public network\n' +
     '            </label>\n' +
+    '        </div>\n' +
+    '        <div class="form-group">\n' +
+    '            <label>Data Elements</label>\n' +
+    '            <div ng-repeat="element in selected.dataElements" ng-form="diagramSubForm">\n' +
+    '                <div class="input-group">\n' +
+    '                    <input name="diagramTitle" class="form-control" type="text" ng-model="element" required placeholder="Element" />\n' +
+    '                    <span class="input-group-btn">\n' +
+    '                        <button class="btn btn-default" data-toggle="tooltip" ng-click="vm.removeDataElement($index)" data-placement="top" title="Remove" aria-hidden="true" type="button">\n' +
+    '                        <span class="glyphicon glyphicon-remove"></span>\n' +
+    '                    </button>\n' +
+    '                    </span>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
+    '            <div ng-repeat-end>\n' +
+    '                <div class="input-group" ng-show="vm.addingDataElement">\n' +
+    '                    <input class="form-control" type="text" ng-model="vm.newDataElement" placeholder="Data Element" />\n' +
+    '                    <span class="input-group-btn">\n' +
+    '                        <button class="btn btn-default" ng-disabled="vm.newDataElement.length == 0" data-toggle="tooltip" ng-click="vm.addDataElement()" data-placement="top" title="Add" aria-hidden="true" type="button">\n' +
+    '                            <span class="glyphicon glyphicon-plus"></span>\n' +
+    '                        </button>\n' +
+    '                    </span>\n' +
+    '                </div>\n' +
+    '                <button ng-show="vm.addingDataElement" class="btn btn-link" data-toggle="tooltip" ng-click="vm.cancelAddingDataElement()" data-placement="top" title="Cancel" aria-hidden="true" type="button">\n' +
+    '                    <span class="glyphicon glyphicon-remove"></span> Cancel\n' +
+    '                </button>\n' +
+    '                <div ng-hide="vm.addingDataElement">\n' +
+    '                    <button class="btn btn-link" ng-click="vm.startAddingDataElement()">\n' +
+    '                        <span class="glyphicon glyphicon-plus"></span> Add a new element ...\n' +
+    '                    </button>\n' +
+    '                </div>\n' +
+    '            </div>\n' +
     '        </div>\n' +
     '    </div>\n' +
     '</form>\n' +
