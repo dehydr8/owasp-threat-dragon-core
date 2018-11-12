@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 var $ = require('jquery');
+var uuidv4 = require('uuid/v4');
 
 function modalClose() {
 
@@ -97,8 +98,14 @@ function elementThreats($routeParams, $location, common, dialogs) {
             }
 
             selectedThreats.threats.forEach(function(item) {
-                scope.threats.push(item.threat);
-                scope.save({ threat: item.threat });
+                // clone the threat
+                var threat = $.extend(true, {}, item.threat);
+
+                // give it a new ID
+                threat.id = uuidv4();
+
+                scope.threats.push(threat);
+                scope.save({ threat: threat });
             });
 
             resetCopy();
@@ -185,7 +192,7 @@ function elementThreats($routeParams, $location, common, dialogs) {
     }
 
     function initialiseThreat() {
-        return { status: 'Open', severity: 'Medium' };
+        return { status: 'Open', severity: 'Medium', id: uuidv4() };
     }
 
     function initialiseSelectedThreats() {
